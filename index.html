@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBERDASH // 2026</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <header>
+        <h1 class="neon-text">CYBER<span>DASH</span> // 2026</h1>
+        <p class="subtitle">NEURAL INTERFACE ACTIVE</p>
+    </header>
+
+    <main class="dashboard">
+        <!-- Виджет часов -->
+        <div class="widget">
+            <h2>SYSTEM TIME</h2>
+            <div id="clock">00:00:00</div>
+            <div id="date">Инициализация...</div>
+        </div>
+
+        <!-- Виджет ресурсов -->
+        <div class="widget">
+            <h2>NEURAL LINK</h2>
+            <div class="status-bar">
+                <span>CPU LOAD</span>
+                <div class="bar"><div id="cpu-fill" class="fill"></div></div>
+            </div>
+            <div class="status-bar">
+                <span>MEMORY</span>
+                <div class="bar"><div id="mem-fill" class="fill"></div></div>
+            </div>
+            <div class="status-bar">
+                <span>NETWORK</span>
+                <div class="bar"><div id="net-fill" class="fill"></div></div>
+            </div>
+        </div>
+
+        <!-- 🖼️ НОВЫЙ ВИДЖЕТ С КАРТИНКОЙ -->
+        <div class="widget media-widget">
+            <h2>MEDIA CORE // ARCHIVE</h2>
+            <div class="image-frame">
+                <img src="media/EnterTheGungeon_S2.jpeg" alt="Enter the Gungeon" class="media-image">
+                <div class="scan-line"></div>
+                <div class="corner corner-tl"></div>
+                <div class="corner corner-tr"></div>
+                <div class="corner corner-bl"></div>
+                <div class="corner corner-br"></div>
+                <div class="image-label">
+                    <span class="label-tag">FILE_001</span>
+                    <span class="label-title">ENTER_THE_GUNGEON.S2</span>
+                </div>
+            </div>
+            <div class="media-info">
+                <div class="info-row"><span>STATUS:</span> <span class="status-ok">LOADED</span></div>
+                <div class="info-row"><span>FORMAT:</span> <span>JPEG</span></div>
+                <div class="info-row"><span>SECTOR:</span> <span>MEDIA/</span></div>
+            </div>
+        </div>
+
+        <!-- Виджет задач -->
+        <div class="widget">
+            <h2>MEMORY CORE (TASKS)</h2>
+            <form id="todo-form">
+                <input type="text" id="todo-input" placeholder="Новая задача..." maxlength="100">
+                <button type="submit">+</button>
+            </form>
+            <ul id="todo-list"></ul>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

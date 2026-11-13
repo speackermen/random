@@ -1,0 +1,385 @@
+:root {
+    --bg-color: #05070a;
+    --neon-cyan: #00f3ff;
+    --neon-magenta: #ff00ea;
+    --text-main: #e0e0e0;
+    --glass-bg: rgba(10, 15, 30, 0.6);
+    --glass-border: rgba(0, 243, 255, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+header {
+    text-align: center;
+    padding: 40px 20px 20px;
+}
+
+.neon-text {
+    font-size: 3rem;
+    color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan);
+    letter-spacing: 5px;
+}
+
+.neon-text span {
+    color: var(--neon-magenta);
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--neon-magenta), 0 0 40px var(--neon-magenta);
+}
+
+.subtitle {
+    color: var(--neon-cyan);
+    letter-spacing: 3px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    opacity: 0.7;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.widget {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.widget:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);
+}
+
+.widget h2 {
+    color: var(--neon-cyan);
+    font-size: 1rem;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+    padding-bottom: 10px;
+}
+
+/* Часы */
+#clock {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    text-align: center;
+    margin: 20px 0;
+}
+
+#date {
+    text-align: center;
+    color: var(--neon-magenta);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+
+/* Статус бары */
+.status-bar {
+    margin-bottom: 15px;
+}
+
+.status-bar span {
+    display: block;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    color: #aaa;
+}
+
+.bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+    border-radius: 4px;
+    transition: width 1s ease-in-out;
+    box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+/* ==========================================
+   🖼️ СТИЛИ ДЛЯ ВИДЖЕТА С КАРТИНКОЙ
+   ========================================== */
+.media-widget {
+    grid-column: span 1;
+}
+
+.image-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--neon-cyan);
+    border-radius: 8px;
+    background: #000;
+    box-shadow: 
+        0 0 15px rgba(0, 243, 255, 0.4),
+        inset 0 0 20px rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+}
+
+.media-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease, filter 0.3s ease;
+    filter: saturate(1.1) contrast(1.05);
+}
+
+.image-frame:hover .media-image {
+    transform: scale(1.05);
+    filter: saturate(1.3) contrast(1.1) brightness(1.1);
+}
+
+/* Эффект глитча при наведении */
+.image-frame:hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 243, 255, 0.05) 0px,
+        rgba(0, 243, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    pointer-events: none;
+    z-index: 3;
+    animation: glitchScan 0.3s linear infinite;
+}
+
+@keyframes glitchScan {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(3px); }
+}
+
+/* Бегущая скан-линия */
+.scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--neon-cyan) 50%, 
+        transparent 100%);
+    box-shadow: 0 0 10px var(--neon-cyan);
+    z-index: 2;
+    animation: scanMove 4s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes scanMove {
+    0% { top: 0%; }
+    100% { top: 100%; }
+}
+
+/* Угловые метки (как в HUD) */
+.corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--neon-magenta);
+    z-index: 4;
+    pointer-events: none;
+}
+
+.corner-tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+.corner-tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+.corner-bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+.corner-br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
+/* Подпись на картинке */
+.image-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px 12px;
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.85) 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 5;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.label-tag {
+    color: var(--neon-magenta);
+    text-shadow: 0 0 5px var(--neon-magenta);
+}
+
+.label-title {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 5px var(--neon-cyan);
+}
+
+/* Информационная панель под картинкой */
+.media-info {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    border-left: 2px solid var(--neon-magenta);
+    font-size: 0.8rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    color: #aaa;
+}
+
+.info-row span:first-child {
+    color: #888;
+    letter-spacing: 1px;
+}
+
+.info-row span:last-child {
+    color: var(--neon-cyan);
+}
+
+.status-ok {
+    color: #00ff88 !important;
+    text-shadow: 0 0 5px #00ff88;
+    animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* Задачи */
+#todo-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#todo-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 10px;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#todo-input:focus {
+    border-color: var(--neon-magenta);
+    box-shadow: 0 0 10px rgba(255, 0, 234, 0.3);
+}
+
+#todo-form button {
+    background: var(--neon-cyan);
+    border: none;
+    border-radius: 6px;
+    width: 40px;
+    color: #000;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.1s;
+}
+
+#todo-form button:hover {
+    background: #fff;
+}
+
+#todo-form button:active {
+    transform: scale(0.95);
+}
+
+#todo-list {
+    list-style: none;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+#todo-list li {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    border-left: 3px solid var(--neon-magenta);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+#todo-list li.completed span {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+#todo-list li .delete-btn {
+    background: none;
+    border: none;
+    color: #ff3333;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#todo-list li .delete-btn:hover {
+    transform: scale(1.2);
+}
+
+/* Скроллбар */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 3px; }
